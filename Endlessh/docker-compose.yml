@@ -11,7 +11,7 @@ services:
       - MSDELAY=10000 #optional
       - MAXLINES=32 #optional
       - MAXCLIENTS=4096 #optional
-      - LOGFILE=false #optional
+      - LOGFILE=true #optional
       - BINDFAMILY= #optional
     volumes:
       - /path/to/appdata:/config #optional
