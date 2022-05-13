@@ -1,5 +1,81 @@
 version: '3'
+
+# EPITECH promo 2023 - HoneyPot project
+# Arthur Mariet, Thierry Masumbuko & Tom Marescot
+# May 2022
+# docker-compose.yml
+
+x-common-variables: &common-variables
+  MYSQL_ROOT_PASSWORD: 'honeypotR00t'
+  DATABASE_HOST: 'database'
+
 services:
-  my-service:
-    build: .
-    tty: true 
+
+  # Web HoneyPot (fake login page, Grafana dashboard to see the database's informations)
+  database:
+    container_name: database
+    restart: always
+    image: mysql:latest
+    environment:
+      <<: *common-variables
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./web-honeypot/src/mysql:/docker-entrypoint-initdb.d/:ro
+      - databasevolume:/var/lib/mysql
+    ports:
+        - "3306:3306"
+  web-honeypot:
+    depends_on:
+        - database
+    build: ./web-honeypot/src/honeypot
+    container_name: web-honeypot
+    restart: always
+    environment:
+      <<: *common-variables
+      PORT: '80'
+    ports:
+        - "80:80"
+  api:
+    depends_on:
+      - database
+    build: ./web-honeypot/src/api
+    container_name: api
+    restart: always
+    environment:
+      <<: *common-variables
+      API_TOKEN: "none"
+      PORT: '81'
+    ports:
+        - "81:81"
+  grafana:
+    container_name: grafana
+    restart: always
+    depends_on:
+        - database
+    image: grafana/grafana:latest
+    environment:
+      <<: *common-variables
+      DB_HOST: "database"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web-honeypot/src/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./web-honeypot/src/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./web-honeypot/src/grafana/honeypot-dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
+      - grafanavolume_data/:/var/lib/grafana
+      - grafanavolume_conf/:/etc/grafana
+      - grafanavolume_log/:/var/log/grafana
+
+  # Kippo Honeypot (fake ssh server)
+  kippo:
+    image: vensder/alpine-kippo
+    container_name: kippo
+    tty: true
+    restart: always
+    ports:
+      - "22:2222"
+volumes:
+  databasevolume:
+  grafanavolume_data:
+  grafanavolume_conf:
+  grafanavolume_log:
