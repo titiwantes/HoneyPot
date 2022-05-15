@@ -79,3 +79,21 @@ volumes:
   grafanavolume_data:
   grafanavolume_conf:
   grafanavolume_log:
+
+endlessh:
+    image: lscr.io/linuxserver/endlessh:latest
+    container_name: endlessh
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      #- MSDELAY=10000 
+      #- MAXLINES=32 
+      #- MAXCLIENTS=4096
+      - LOGFILE=true 
+      #- BINDFAMILY=
+    volumes:
+      - /path/to/appdata:/config
+    ports:
+      - 22:2222
+    restart: unless-stopped
