@@ -1,0 +1,19 @@
+{
+  "date": "1652640181182",
+  "data": {
+    "countryFlag": "🇯🇵",
+    "country": "Japan",
+    "countryCode": "JP",
+    "region": "13",
+    "regionName": "Tokyo",
+    "city": "Tokyo",
+    "zip": "151-0053",
+    "lat": 35.6893,
+    "lon": 139.6899,
+    "timezone": "Asia/Tokyo",
+    "isp": "GSL Networks Pty LTD",
+    "org": "GSL Networks Pty LTD",
+    "as": "AS137409 GSL Networks Pty LTD"
+  },
+  "file": "https://nurykabe.com/dump/text/lists/liste%20d'%c3%a9l%c3%a9ments%20chimiques%20(fr).txt"
+}
